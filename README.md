@@ -42,6 +42,10 @@ Calculate seasonality of any asset: here we show gold and FX volatility seasonal
 
 <img src="https://github.com/cuemacro/finmarketpy/blob/master/finmarketpy/examples/gallery/fx-vol-seasonality.png?raw=true" width="750"/>
 
+Calculate event study around events for asset (see examples/events_examples.py)
+
+<img src="https://github.com/cuemacro/finmarketpy/blob/master/finmarketpy/examples/gallery/usdjpy-nfp.png?raw=true" width="750"/>
+
 
 # Requirements
 
@@ -79,7 +83,7 @@ In finmarketpy/examples you will find several examples, including some simple tr
 
 # Coding log
 
-* 02 Sep 2016 - Fixed issue with external dataframe eco events
+* 02 Sep 2016 - Fixed issue with external dataframe eco events, added event study example
 * 01 Sep 2016 - Added seasonality example for FX vol
 * 22 Aug 2016 - Fixed boot issue and added credentials
 * 17 Aug 2016 - Uploaded first code
