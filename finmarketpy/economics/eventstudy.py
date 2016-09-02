@@ -233,7 +233,7 @@ class EventsFactory(EventStudy):
     ### manual offset for certain events where Bloomberg displays the wrong date (usually because of time differences)
     _offset_events = {'AUD-Australia Labor Force Employment Change SA.release-dt' : 1}
 
-    def __init__(self):
+    def __init__(self, df = None):
         super(EventStudy, self).__init__()
 
         self.config = ConfigManager()
@@ -241,12 +241,15 @@ class EventsFactory(EventStudy):
         self.filter = Filter()
         self.io_engine =IOEngine()
 
-        if (EventsFactory._econ_data_frame is None):
+        if df is not None:
+            self._econ_data_frame = df
+        elif (self._econ_data_frame is None):
             self.load_economic_events()
+
         return
 
     def load_economic_events(self):
-        EventsFactory._econ_data_frame = self.io_engine.read_time_series_cache_from_disk(self._hdf5_file_econ_file)
+        self._econ_data_frame = self.io_engine.read_time_series_cache_from_disk(self._hdf5_file_econ_file)
 
     def harvest_category(self, category_name):
         cat = self.config.get_categories_from_tickers_selective_filter(category_name)
@@ -260,17 +263,17 @@ class EventsFactory(EventStudy):
         return data_frame
 
     def get_economic_events(self):
-        return EventsFactory._econ_data_frame
+        return self._econ_data_frame
 
     def dump_economic_events_csv(self, path):
-        EventsFactory._econ_data_frame.to_csv(path)
+        self._econ_data_frame.to_csv(path)
 
     def get_economic_event_date_time(self, name, event = None, csv = None):
         ticker = self.create_event_desciptor_field(name, event, "release-date-time-full")
 
         if csv is None:
-            data_frame = EventsFactory._econ_data_frame[ticker]
-            data_frame.index = EventsFactory._econ_data_frame[ticker]
+            data_frame = self._econ_data_frame[ticker]
+            data_frame.index = self._econ_data_frame[ticker]
         else:
             dateparse = lambda x: datetime.datetime.strptime(x, '%d/%m/%Y %H:%M')
 
@@ -329,8 +332,8 @@ class EventsFactory(EventStudy):
         event_date_time_frame.index = date_time_dt
 
         ######## grab event date/fields
-        data_frame = EventsFactory._econ_data_frame[ticker]
-        data_frame.index = EventsFactory._econ_data_frame[ticker_index]
+        data_frame = self._econ_data_frame[ticker]
+        data_frame.index = self._econ_data_frame[ticker_index]
 
         data_frame = data_frame[data_frame.index != 0]              # eliminate any 0 dates (artifact of Excel)
         data_frame = data_frame[pandas.notnull(data_frame.index)]   # eliminate any NaN dates (artifact of Excel)
@@ -374,7 +377,7 @@ class EventsFactory(EventStudy):
         return data_frame
 
     def get_all_economic_events(self):
-        field_names = EventsFactory._econ_data_frame.columns.values
+        field_names = self._econ_data_frame.columns.values
 
         event_names = [x.split('.')[0] for x in field_names if '.Date' in x]
 
@@ -384,7 +387,7 @@ class EventsFactory(EventStudy):
         return list(set(event_names_filtered))
 
     def get_economic_event_date(self, name, event = None):
-        return EventsFactory._econ_data_frame[
+        return self._econ_data_frame[
             self.create_event_desciptor_field(name, event, ".release-dt")]
 
     def get_economic_event_ret_over_custom_event_day(self, data_frame_in, name, event, start, end, lagged = False,
