@@ -79,6 +79,7 @@ In finmarketpy/examples you will find several examples, including some simple tr
 
 # Coding log
 
+* 02 Sep 2016 - Fixed issue with external dataframe eco events
 * 01 Sep 2016 - Added seasonality example for FX vol
 * 22 Aug 2016 - Fixed boot issue and added credentials
 * 17 Aug 2016 - Uploaded first code
