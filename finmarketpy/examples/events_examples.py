@@ -36,10 +36,10 @@ if run_example == 1 or run_example == 0:
         start_date=start_date,      # start date
         finish_date=finish_date,    # finish date
         category='fx',
-        freq='intraday',  # intraday
-        data_source='bloomberg',  # use Bloomberg as data source
-        tickers=['USDJPY'],  # ticker (Thalesians)
-        fields=['close'],  # which fields to download
+        freq='intraday',                # intraday
+        data_source='bloomberg',        # use Bloomberg as data source
+        tickers=['USDJPY'],             # ticker (finmarketpy)
+        fields=['close'],               # which fields to download
         cache_algo='internet_load_return')  # how to return data
 
     market = Market(market_data_generator=MarketDataGenerator())
